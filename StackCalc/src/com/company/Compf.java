@@ -5,6 +5,7 @@ import java.util.Scanner;
 public class Compf extends Stack{
     // Типы символов (скобки, знаки операции, иное).
     Scanner scan = new Scanner(System.in);
+    static int num = 0;
     protected final static int SYM_LEFT = 0,
             SYM_RIGHT = 1,
             SYM_OPER = 2,
@@ -13,12 +14,16 @@ public class Compf extends Stack{
     private int symType(char c) {
         switch (c) {
             case '(':
+                num = 0;
             return SYM_LEFT;
             case ')':
+                num = 0;
             return SYM_RIGHT;
             case '+': case '-': case '*': case '/': case '^':
+                num = 0;
             return SYM_OPER;
             default:
+                num++;
                 return symOther(c);
         }
     }
@@ -39,7 +44,12 @@ public class Compf extends Stack{
             nextOper(pop());
     }
     private int priority(char c) {
-        return c == '+' || c == '-' ? 1 : 2;
+        int res = 0;
+        if (c == '+' || c == '-')res = 1;
+        else if (c == '*' || c == '/')res = 2;
+        else if (c == '^')res = 3;
+        //return c == '+' || c == '-' ? 1 : 2;
+        return res;
     }
     private boolean precedes(char a, char b) {
         if(symType(a) == SYM_LEFT) return false;
